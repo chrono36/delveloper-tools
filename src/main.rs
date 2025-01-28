@@ -8,7 +8,6 @@ pub const PLAY_WRITE_FAMILY_NAME: &str = "Playwrite AU SA";
 pub const HARMONYOS_FAMILY_NAME: &str = "HarmonyOS SANS SC";
 
 fn main() -> eframe::Result<()> {
-
     const ICON: &[u8] = include_bytes!("../assets/logo.png");
 
     let native_options = eframe::NativeOptions {
@@ -80,7 +79,6 @@ fn setup_fonts(ctx: &egui::Context) {
 
     ctx.all_styles_mut(move |style| style.text_styles = text_styles.clone());
 }
-
 
 fn load_fonts(ctx: &egui::Context) {
     let msyh_font = FontData::from_static(include_bytes!(

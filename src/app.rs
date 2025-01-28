@@ -1,6 +1,5 @@
 use developer_tools::tools::{
-    base64_tool::Base64Tool, datetime_tool::DateTimeTool, diff_tool::DiffTool, hash_tool::HashTool,
-    hex_tool::HexTool, json_tool::JsonTool, sql_tool::SqlTool, Tool,
+    base64_tool::Base64Tool, calculator_tool::CalculatorTool, datetime_tool::DateTimeTool, diff_tool::DiffTool, hash_tool::HashTool, hex_tool::HexTool, json_tool::JsonTool, sql_tool::SqlTool, Tool
 };
 use eframe::egui;
 use egui::{RichText, TextStyle};
@@ -47,6 +46,10 @@ impl DeveloperTools {
             "Hex Tool".to_string(),
             Box::new(HexTool::default()) as Box<dyn Tool>,
         );
+        tools.insert(
+            "Caculator".to_string(),
+            Box::new(CalculatorTool::default()) as Box<dyn Tool>,
+        );
 
         Self {
             selected_tool: None,
@@ -84,7 +87,6 @@ impl DeveloperTools {
             //top
             ui.with_layout(egui::Layout::top_down(egui::Align::Max), |ui| {
                 ui.horizontal(|ui| {
-                    
                     // egui::widgets::global_theme_preference_switch(ui);
                     if ui.button("GitHub").clicked() {
                         // if let Err(e) = webbrowser::open("https://github.com/chronosp/developer-tools") {
