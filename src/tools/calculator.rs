@@ -241,8 +241,8 @@ impl<'a> Expr<'a> {
         Ok(atom_lhs)
     }
 
-      // 计算表达式，获取结果
-      pub fn eval(&mut self) -> Result<i32> {
+    // 计算表达式，获取结果
+    pub fn eval(&mut self) -> Result<i32> {
         let result = self.compute_expr(1)?;
         // 如果还有 Token 没有处理，说明表达式存在错误
         if self.iter.peek().is_some() {
@@ -253,10 +253,10 @@ impl<'a> Expr<'a> {
 }
 
 #[cfg(test)]
-mod test{
+mod test {
     use super::*;
     #[test]
-    fn test_calc(){
+    fn test_calc() {
         let mut expr = Expr::new("1+2*3");
         let result = expr.eval();
         assert_eq!(result.unwrap(), 7);

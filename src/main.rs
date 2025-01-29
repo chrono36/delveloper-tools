@@ -1,7 +1,7 @@
 mod app;
 use std::{collections::BTreeMap, sync::Arc};
 
-use app::DeveloperTools;
+use app::App;
 use egui::{FontData, FontDefinitions, FontFamily, FontId, TextStyle};
 
 pub const PLAY_WRITE_FAMILY_NAME: &str = "Playwrite AU SA";
@@ -24,7 +24,7 @@ fn main() -> eframe::Result<()> {
         Box::new(|cc| {
             setup_fonts(&cc.egui_ctx);
             egui_extras::install_image_loaders(&cc.egui_ctx);
-            Ok(Box::new(DeveloperTools::new(cc)))
+            Ok(Box::new(App::new(cc)))
         }),
     )
 }

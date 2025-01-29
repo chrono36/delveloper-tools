@@ -53,7 +53,9 @@ impl CalculatorTool {
         let mut expr = Expr::new(input);
         match expr.eval() {
             Ok(result) => {
-                self.state.history.push((input.to_string(), result.to_string()));
+                self.state
+                    .history
+                    .push((input.to_string(), result.to_string()));
                 self.state.input.clear();
                 self.state.error.clear();
             }
