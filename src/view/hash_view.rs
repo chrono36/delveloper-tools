@@ -25,7 +25,6 @@ impl View for HashView {
             ui.separator();
             ui.label(RichText::new("Hash a text string using the function you need: MD5, SHA1, SHA256, SHA224, SHA512, SHA384, SHA3 or RIPEMD160").text_style(egui::TextStyle::Small));
             ui.add_space(15.0);
-            
             ui.label("Input text:");
             ui.add_space(4.0);
             let text_edit = egui::TextEdit::multiline(&mut self.input)
@@ -52,7 +51,6 @@ impl View for HashView {
             .show(ui, |ui| {
                 self.hash_result_view(ui,&column_widths);
             });
-       
         });
     }
 }

@@ -2,7 +2,7 @@ pub mod calculator_view;
 pub mod datetime_view;
 pub mod formatter_view;
 pub mod hash_view;
-
+pub mod number_view;
 pub trait View {
     fn render(&mut self, ui: &mut egui::Ui);
 }
