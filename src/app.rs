@@ -1,4 +1,6 @@
-use developer_tools::view::{calculator_view::CalcView, hash_view::HashView, DefaultView, View};
+use developer_tools::view::{
+    calculator_view::CalcView, formatter_view::FormatterView, hash_view::HashView, View,
+};
 use eframe::egui;
 use egui::{RichText, TextStyle};
 // use webbrowser;
@@ -9,8 +11,8 @@ enum DeveloperTools {
     Calculator(CalcView),
     // TextDifference,
     // Base64,
-    // JsonFormatter,
-    // SqlFormatter,
+    JsonFormatter(FormatterView),
+    SqlFormatter(FormatterView),
     // DateTimeConverter,
     // NumberBaseConverter,
 }
@@ -28,8 +30,8 @@ impl DeveloperTools {
             DeveloperTools::Calculator(_v) => "Calculator",
             // DeveloperTools::TextDifference => "Text Difference",
             // DeveloperTools::Base64 => "Base64",
-            // DeveloperTools::JsonFormatter => "Json Formatter",
-            // DeveloperTools::SqlFormatter => "Sql Formatter",
+            DeveloperTools::JsonFormatter(_v) => "Json Formatter",
+            DeveloperTools::SqlFormatter(_v) => "Sql Formatter",
             // DeveloperTools::DateTimeConverter => "Date Time Converter",
             // DeveloperTools::NumberBaseConverter => "Number Base Converter",
         }
@@ -39,29 +41,10 @@ impl DeveloperTools {
         match self {
             DeveloperTools::Hashing(v) => v.render(ui),
             DeveloperTools::Calculator(v) => v.render(ui),
+            DeveloperTools::JsonFormatter(v) => v.render(ui),
+            DeveloperTools::SqlFormatter(v) => v.render(ui),
         }
     }
-
-    // fn view(&self) -> Box<dyn View> {
-    //     match self {
-    //         DeveloperTools::Hashing(v) => Box::new(v),
-    //         DeveloperTools::Calculator => Box::new(developer_tools::view::DefaultView::default()),
-    //         // DeveloperTools::TextDifference => {
-    //         //     Box::new(developer_tools::view::DefaultView::default())
-    //         // }
-    //         // DeveloperTools::Base64 => Box::new(developer_tools::view::DefaultView::default()),
-    //         // DeveloperTools::JsonFormatter => {
-    //         //     Box::new(developer_tools::view::DefaultView::default())
-    //         // }
-    //         // DeveloperTools::SqlFormatter => Box::new(developer_tools::view::DefaultView::default()),
-    //         // DeveloperTools::DateTimeConverter => {
-    //         //     Box::new(developer_tools::view::DefaultView::default())
-    //         // }
-    //         // DeveloperTools::NumberBaseConverter => {
-    //         //     Box::new(developer_tools::view::DefaultView::default())
-    //         // }
-    //     }
-    // }
 }
 
 // 主应用结构
@@ -73,12 +56,13 @@ pub struct App {
 
 impl App {
     pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
-        println!("init ...");
         Self {
             selected_tool_index: None,
             developer_tools: vec![
                 DeveloperTools::Hashing(HashView::new()),
                 DeveloperTools::Calculator(CalcView::default()),
+                DeveloperTools::JsonFormatter(FormatterView::new("json")),
+                DeveloperTools::SqlFormatter(FormatterView::new("sql")),
             ],
         }
     }
