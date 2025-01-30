@@ -4,6 +4,7 @@ use md5::{Digest, Md5};
 use sha1::Sha1;
 use sha2::Sha256;
 
+#[warn(dead_code)]
 struct Hasher {
     input: String,
     algorithm: HashAlgorithm,
@@ -60,7 +61,7 @@ impl fmt::Display for HashAlgorithm {
 }
 
 impl Hasher {
-    pub fn hashing(&self) -> String {
+    pub fn _hashing(&self) -> String {
         let text_bytes = self.input.as_bytes();
         match self.algorithm {
             HashAlgorithm::MD5 => {

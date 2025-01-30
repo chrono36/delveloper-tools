@@ -260,7 +260,7 @@ mod test {
         let mut expr = Expr::new("1+2*3");
         let result = expr.eval();
         assert_eq!(result.unwrap(), 7);
-        let mut expr = Expr::new("1+2*3+4");
+        let mut expr = Expr::new("1+2*3+4x");
         let result = expr.eval();
         assert_eq!(result.unwrap(), 11);
     }

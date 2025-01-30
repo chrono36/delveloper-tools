@@ -1,4 +1,4 @@
-use developer_tools::view::{hash_view::HashView, DefaultView, View};
+use developer_tools::view::{calculator_view::CalcView, hash_view::HashView, DefaultView, View};
 use eframe::egui;
 use egui::{RichText, TextStyle};
 // use webbrowser;
@@ -6,7 +6,7 @@ use egui::{RichText, TextStyle};
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum DeveloperTools {
     Hashing(HashView),
-    Calculator(DefaultView),
+    Calculator(CalcView),
     // TextDifference,
     // Base64,
     // JsonFormatter,
@@ -78,7 +78,7 @@ impl App {
             selected_tool_index: None,
             developer_tools: vec![
                 DeveloperTools::Hashing(HashView::new()),
-                DeveloperTools::Calculator(DefaultView::default()),
+                DeveloperTools::Calculator(CalcView::default()),
             ],
         }
     }

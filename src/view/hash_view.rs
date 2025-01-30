@@ -42,7 +42,7 @@ impl View for HashView {
             let column_widths = [60.0, ui.available_width() - 60.0, 60.0]; // 定义三列宽度
                   // 计算可用宽度（留出20px边距）
             let available_width = ui.available_width() - 120.0;
-            println!("available_width:{}",available_width);
+            // println!("available_width:{}",available_width);
             egui::Grid::new("hash result")
             .num_columns(3)
             .min_col_width(40.0) // 设置列最小宽度

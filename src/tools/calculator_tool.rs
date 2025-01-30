@@ -1,5 +1,5 @@
 use super::{Tool, ToolLogic, ToolState, ToolUI};
-use crate::tools::calculator::Expr;
+// use crate::tools::calculator::Expr;
 use eframe::egui;
 
 #[derive(Default)]
@@ -44,27 +44,27 @@ impl CalculatorTool {
         Self::default()
     }
 
-    fn calculate(&mut self) {
-        let input = self.state.input.trim();
-        if input.is_empty() {
-            return;
-        }
+    // fn calculate(&mut self) {
+    //     let input = self.state.input.trim();
+    //     if input.is_empty() {
+    //         return;
+    //     }
 
-        let mut expr = Expr::new(input);
-        match expr.eval() {
-            Ok(result) => {
-                self.state
-                    .history
-                    .push((input.to_string(), result.to_string()));
-                self.state.input.clear();
-                self.state.error.clear();
-            }
-            Err(e) => {
-                self.state.error = e.to_string();
-            }
-        }
-        self.state.is_dirty = true;
-    }
+    //     let mut expr = Expr::new(input);
+    //     match expr.eval() {
+    //         Ok(result) => {
+    //             self.state
+    //                 .history
+    //                 .push((input.to_string(), result.to_string()));
+    //             self.state.input.clear();
+    //             self.state.error.clear();
+    //         }
+    //         Err(e) => {
+    //             self.state.error = e.to_string();
+    //         }
+    //     }
+    //     self.state.is_dirty = true;
+    // }
 
     fn ui(&mut self, ui: &mut egui::Ui) {
         ui.vertical_centered(|ui| {
@@ -79,9 +79,9 @@ impl CalculatorTool {
             let response = ui.add(text_edit);
 
             // Handle Enter key press
-            if response.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter)) {
-                self.calculate();
-            }
+            // if response.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter)) {
+            //     self.calculate();
+            // }
 
             // Error display
             if !self.state.error.is_empty() {
@@ -138,7 +138,7 @@ impl Tool for CalculatorTool {
 
 impl ToolLogic for CalculatorTool {
     fn process(&mut self) -> Result<(), String> {
-        self.calculate();
+        // self.calculate();
         if !self.state.error.is_empty() {
             return Err(self.state.error.clone());
         }

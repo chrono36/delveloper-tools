@@ -1,5 +1,5 @@
 pub mod base64_tool;
-pub mod calculator;
+
 pub mod calculator_tool;
 pub mod datetime_tool;
 pub mod diff_tool;
