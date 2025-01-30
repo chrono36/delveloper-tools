@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 eframe = { version = "0.30.0", features = ["__screenshot", "default"] }
 egui = "0.30.0"
-egui_extras = { version = "0.30.0", features = ["image","all_loaders"] }
+egui_extras = { version = "0.30.0", features = ["image", "all_loaders"] }
 hex = "0.4.3"
 md-5 = "0.10.6"
 sha1 = "0.10.6"

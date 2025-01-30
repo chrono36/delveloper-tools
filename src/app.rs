@@ -1,5 +1,6 @@
 use developer_tools::view::{
-    calculator_view::CalcView, formatter_view::FormatterView, hash_view::HashView, View,
+    calculator_view::CalcView, datetime_view::DateTimeConverterView, formatter_view::FormatterView,
+    hash_view::HashView, View,
 };
 use eframe::egui;
 use egui::{RichText, TextStyle};
@@ -13,7 +14,7 @@ enum DeveloperTools {
     // Base64,
     JsonFormatter(FormatterView),
     SqlFormatter(FormatterView),
-    // DateTimeConverter,
+    DateTimeConverter(DateTimeConverterView),
     // NumberBaseConverter,
 }
 
@@ -32,7 +33,7 @@ impl DeveloperTools {
             // DeveloperTools::Base64 => "Base64",
             DeveloperTools::JsonFormatter(_v) => "Json Formatter",
             DeveloperTools::SqlFormatter(_v) => "Sql Formatter",
-            // DeveloperTools::DateTimeConverter => "Date Time Converter",
+            DeveloperTools::DateTimeConverter(_v) => "Date Time Converter",
             // DeveloperTools::NumberBaseConverter => "Number Base Converter",
         }
     }
@@ -43,6 +44,7 @@ impl DeveloperTools {
             DeveloperTools::Calculator(v) => v.render(ui),
             DeveloperTools::JsonFormatter(v) => v.render(ui),
             DeveloperTools::SqlFormatter(v) => v.render(ui),
+            DeveloperTools::DateTimeConverter(v) => v.render(ui),
         }
     }
 }
@@ -63,6 +65,7 @@ impl App {
                 DeveloperTools::Calculator(CalcView::default()),
                 DeveloperTools::JsonFormatter(FormatterView::new("json")),
                 DeveloperTools::SqlFormatter(FormatterView::new("sql")),
+                DeveloperTools::DateTimeConverter(DateTimeConverterView::new()),
             ],
         }
     }

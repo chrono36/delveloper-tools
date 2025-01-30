@@ -76,12 +76,12 @@ impl HashView {
 
             // 第三列：复制按钮
 
-            ui.with_layout(egui::Layout::left_to_right(egui::Align::Center),|ui|{
+            ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
                 // ui.set_width(60.0); // 固定按钮列宽
                 if ui.small_button("📋").clicked() {
                     // 复制逻辑
                 }
-            } );
+            });
 
             // ui.with_layout(
             //     egui::Layout::right_to_left(egui::Align::Center),
