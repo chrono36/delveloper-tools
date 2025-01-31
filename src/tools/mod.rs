@@ -1,12 +1,12 @@
 pub mod base64_tool;
 
-pub mod calculator_tool;
-pub mod datetime_tool;
-pub mod diff_tool;
-pub mod hash_tool;
-pub mod hex_tool;
-pub mod json_tool;
-pub mod sql_tool;
+// pub mod calculator_tool;
+// pub mod datetime_tool;
+// pub mod diff_tool;
+// pub mod hash_tool;
+// pub mod hex_tool;
+// pub mod json_tool;
+// pub mod sql_tool;
 
 use eframe::egui;
 
