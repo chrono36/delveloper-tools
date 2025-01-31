@@ -33,20 +33,20 @@ mod test {
             "Hello World\nThis is the second line.\nThis is life.\nMoar and more",
         );
 
-        let all_changes = diff
-            .ops()
-            .iter()
-            .flat_map(|op| diff.iter_changes(op))
-            .collect::<Vec<_>>();
-        println!("{}", serde_json::to_string_pretty(&all_changes).unwrap());
+        // let all_changes = diff
+        //     .ops()
+        //     .iter()
+        //     .flat_map(|op| diff.iter_inline_changes(op))
+        //     .collect::<Vec<_>>();
+        // println!("{}", serde_json::to_string_pretty(&all_changes).unwrap());
 
-        // for change in diff.iter_all_changes() {
-        //     let sign = match change.tag() {
-        //         ChangeTag::Delete => "-",
-        //         ChangeTag::Insert => "+",
-        //         ChangeTag::Equal => "=",
-        //     };
-        //     print!("{}{}", sign, change);
-        // }
+        for change in diff.iter_all_changes() {
+            let sign = match change.tag() {
+                ChangeTag::Delete => "-",
+                ChangeTag::Insert => "+",
+                ChangeTag::Equal => "=",
+            };
+            print!("{}{}", sign, change);
+        }
     }
 }

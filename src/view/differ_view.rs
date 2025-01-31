@@ -1,3 +1,5 @@
+use std::f32;
+
 use egui::{Color32, FontId, RichText, TextFormat, Widget};
 
 use crate::model::TextDifference;
@@ -22,7 +24,7 @@ impl DifferenceView {
         }
     }
 
-    fn create_colored_editor(
+    fn _create_colored_editor(
         ui: &mut egui::Ui,
         text: &mut String,
         is_original: bool,
@@ -76,12 +78,13 @@ impl DifferenceView {
                 .into_iter()
                 // 过滤有效差异
                 .filter(|(_, flag)| flag == "-" || flag == "+")
+                // .filter(|(val, _)| val != "\n")
                 .collect()
         } else {
             Vec::new()
         };
 
-        // println!("{:?}", self.differs);
+        println!("{:?}", self.differs);
     }
 }
 
@@ -148,24 +151,54 @@ impl View for DifferenceView {
                 egui::ScrollArea::vertical()
                     .auto_shrink(false)
                     .show(ui, |ui| {
-                        for (text, flag) in &self.differs {
-                            let color = match flag.as_str() {
-                                "-" => Color32::LIGHT_RED,
-                                "+" => Color32::LIGHT_GREEN,
-                                _ => Color32::GRAY,
-                            };
+                        let mut layouter = |ui: &egui::Ui, _: &str, wrap_width: f32| {
+                            let mut layout_job = egui::text::LayoutJob::default();
+                            for (text, flag) in &self.differs {
+                                let color = match flag.as_str() {
+                                    "-" => Color32::LIGHT_RED,
+                                    "+" => Color32::LIGHT_GREEN,
+                                    _ => Color32::GRAY,
+                                };
 
-                            // 显示操作符号和内容
-                            ui.horizontal(|ui| {
-                                ui.label(
-                                    RichText::new(flag)
-                                        .color(color)
-                                        .monospace()
-                                        .background_color(Color32::from_black_alpha(10)),
+                                layout_job.append(
+                                    text,
+                                    0.0,
+                                    TextFormat {
+                                        font_id: FontId::monospace(14.0),
+                                        background: color,
+                                        ..Default::default()
+                                    },
                                 );
-                                ui.label(RichText::new(text).background_color(color).monospace());
-                            });
-                        }
+
+                                // 显式添加换行符
+                                layout_job.append(
+                                    "\n",
+                                    0.0,
+                                    TextFormat {
+                                        font_id: FontId::monospace(14.0),
+                                        ..Default::default()
+                                    },
+                                );
+                            }
+
+                            layout_job.wrap.max_width = wrap_width;
+                            ui.fonts(|f| f.layout_job(layout_job))
+                        };
+
+                        let mut text = self
+                            .differs
+                            .iter()
+                            .map(|(w, f)| w.to_string())
+                            .collect::<Vec<String>>()
+                            .join("\n");
+
+                        egui::TextEdit::multiline(&mut text)
+                            .font(egui::TextStyle::Monospace)
+                            .code_editor()
+                            .desired_rows(10)
+                            .desired_width(f32::INFINITY)
+                            .layouter(&mut layouter)
+                            .ui(ui);
                     });
             });
         });
