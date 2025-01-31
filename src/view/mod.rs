@@ -1,5 +1,6 @@
 pub mod calculator_view;
 pub mod datetime_view;
+pub mod differ_view;
 pub mod formatter_view;
 pub mod hash_view;
 pub mod number_view;

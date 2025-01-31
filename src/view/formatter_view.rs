@@ -39,6 +39,13 @@ impl FormatterView {
         }
     }
 
+    pub fn language(&self) -> &str {
+        match self.formatter_type {
+            FormatterType::JSON => "json",
+            FormatterType::SQL => "sql",
+        }
+    }
+
     pub fn description(&self) -> &str {
         match self.formatter_type {
             FormatterType::JSON => {
@@ -72,27 +79,67 @@ impl FormatterView {
 
 impl View for FormatterView {
     fn render(&mut self, ui: &mut egui::Ui) {
+        let Self {
+            input,
+            err_msg,
+            formatter_type,
+        } = self;
+
         ui.vertical(|ui| {
             ui.heading(self.title());
             ui.separator();
             ui.label(RichText::new(self.description()).text_style(egui::TextStyle::Small));
 
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Min), |ui| {
-                if ui.label("formatter").clicked() {
+                if ui
+                    .link(RichText::new("formatter").text_style(egui::TextStyle::Button))
+                    .clicked()
+                {
                     self.formatter();
                 }
             });
 
             ui.add_space(10.0);
 
-            let text_edit = egui::TextEdit::multiline(&mut self.input)
-                .font(egui::TextStyle::Monospace)
-                .desired_rows(20)
-                .desired_width(ui.available_width())
-                .hint_text("Enter your format text ...")
-                .lock_focus(true)
-                .code_editor();
-            let _ = ui.add(text_edit);
+            let theme =
+                egui_extras::syntax_highlighting::CodeTheme::from_memory(ui.ctx(), ui.style());
+
+            let language = match self.formatter_type {
+                FormatterType::JSON => "json",
+                FormatterType::SQL => "sql",
+            };
+
+            let mut layouter = |ui: &egui::Ui, string: &str, wrap_width: f32| {
+                let mut layout_job = egui_extras::syntax_highlighting::highlight(
+                    ui.ctx(),
+                    ui.style(),
+                    &theme,
+                    string,
+                    language,
+                );
+                layout_job.wrap.max_width = wrap_width;
+                ui.fonts(|f| f.layout_job(layout_job))
+            };
+
+            egui::ScrollArea::both().show(ui, |ui| {
+                let text_edit = egui::TextEdit::multiline(&mut self.input)
+                    .font(egui::TextStyle::Monospace) // for cursor height
+                    .code_editor()
+                    .desired_rows(20)
+                    .lock_focus(true)
+                    .desired_width(f32::INFINITY)
+                    .layouter(&mut layouter);
+                let _ = ui.add(text_edit);
+            });
+
+            // let text_edit = egui::TextEdit::multiline(&mut self.input)
+            //     .font(egui::TextStyle::Monospace)
+            //     .desired_rows(20)
+            //     .desired_width(ui.available_width())
+            //     .hint_text("Enter your format text ...")
+            //     .lock_focus(true)
+            //     .code_editor();
+            // let _ = ui.add(text_edit);
         });
     }
 }
