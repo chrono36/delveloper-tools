@@ -6,6 +6,7 @@ use egui::{FontData, FontDefinitions, FontFamily, FontId, TextStyle};
 
 pub const PLAY_WRITE_FAMILY_NAME: &str = "Playwrite AU SA";
 pub const HARMONYOS_FAMILY_NAME: &str = "HarmonyOS SANS SC";
+const ALIBABAPUHUITI_FAMILY_NAME: &str = "AlibabaPuHuiTi-3-55-Regular";
 
 fn main() -> eframe::Result<()> {
     const ICON: &[u8] = include_bytes!("../assets/logo.png");
@@ -86,6 +87,10 @@ fn load_fonts(ctx: &egui::Context) {
     ));
     let handwriting_font = FontData::from_static(include_bytes!("../assets/fonts/Playwrite.ttf"));
 
+    let puhu_font = FontData::from_static(include_bytes!(
+        "../assets/fonts/AlibabaPuHuiTi-3-55-Regular.ttf"
+    ));
+
     let mut fonts = FontDefinitions::default();
 
     fonts
@@ -96,6 +101,10 @@ fn load_fonts(ctx: &egui::Context) {
         Arc::from(handwriting_font),
     );
 
+    fonts
+        .font_data
+        .insert(ALIBABAPUHUITI_FAMILY_NAME.to_owned(), Arc::from(puhu_font));
+
     fonts.families.insert(
         FontFamily::Proportional,
         vec![HARMONYOS_FAMILY_NAME.to_owned()],
@@ -103,7 +112,7 @@ fn load_fonts(ctx: &egui::Context) {
 
     fonts.families.insert(
         FontFamily::Monospace,
-        vec![HARMONYOS_FAMILY_NAME.to_owned()],
+        vec![ALIBABAPUHUITI_FAMILY_NAME.to_owned()],
     );
 
     fonts.families.insert(

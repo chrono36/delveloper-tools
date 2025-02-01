@@ -78,7 +78,7 @@ impl FormatterView {
 }
 
 impl View for FormatterView {
-    fn render(&mut self, ui: &mut egui::Ui) {
+    fn render(&mut self, _ctx: &egui::Context, ui: &mut egui::Ui) {
         let Self {
             input,
             err_msg,

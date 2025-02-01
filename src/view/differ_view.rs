@@ -89,7 +89,7 @@ impl DifferenceView {
 }
 
 impl View for DifferenceView {
-    fn render(&mut self, ui: &mut egui::Ui) {
+    fn render(&mut self, _ctx: &egui::Context, ui: &mut egui::Ui) {
         ui.vertical(|ui| {
             ui.heading("Text Difference");
             ui.separator();

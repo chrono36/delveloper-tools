@@ -1,21 +1,23 @@
 use developer_tools::view::{
     calculator_view::CalcView, datetime_view::DateTimeConverterView, differ_view::DifferenceView,
-    formatter_view::FormatterView, hash_view::HashView, number_view::NumberBaseConverterView, View,
+    fish_view::StockView, formatter_view::FormatterView, game_of_life::GameOfLifeView,
+    hash_view::HashView, number_view::NumberBaseConverterView, View, WindowView,
 };
 use eframe::egui;
 use egui::{RichText, TextStyle};
 // use webbrowser;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 enum DeveloperTools {
     Hashing(HashView),
     Calculator(CalcView),
     TextDifference(DifferenceView),
-    // Base64,
     JsonFormatter(FormatterView),
     SqlFormatter(FormatterView),
     DateTimeConverter(DateTimeConverterView),
     NumberBaseConverter(NumberBaseConverterView),
+    GameOfLife(GameOfLifeView),
+    // MOFish(StockView),
 }
 
 impl Default for DeveloperTools {
@@ -35,18 +37,22 @@ impl DeveloperTools {
             DeveloperTools::SqlFormatter(_v) => "Sql Formatter",
             DeveloperTools::DateTimeConverter(_v) => "Date Time Converter",
             DeveloperTools::NumberBaseConverter(_v) => "Number Base Converter",
+            DeveloperTools::GameOfLife(_v) => "Game of Life",
+            // DeveloperTools::MOFish(_v) => "mo fish",
         }
     }
 
-    fn view(&mut self, ui: &mut egui::Ui) {
+    fn view(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         match self {
-            DeveloperTools::Hashing(v) => v.render(ui),
-            DeveloperTools::Calculator(v) => v.render(ui),
-            DeveloperTools::JsonFormatter(v) => v.render(ui),
-            DeveloperTools::SqlFormatter(v) => v.render(ui),
-            DeveloperTools::DateTimeConverter(v) => v.render(ui),
-            DeveloperTools::NumberBaseConverter(v) => v.render(ui),
-            DeveloperTools::TextDifference(v) => v.render(ui),
+            DeveloperTools::Hashing(v) => v.render(ctx, ui),
+            DeveloperTools::Calculator(v) => v.render(ctx, ui),
+            DeveloperTools::JsonFormatter(v) => v.render(ctx, ui),
+            DeveloperTools::SqlFormatter(v) => v.render(ctx, ui),
+            DeveloperTools::DateTimeConverter(v) => v.render(ctx, ui),
+            DeveloperTools::NumberBaseConverter(v) => v.render(ctx, ui),
+            DeveloperTools::TextDifference(v) => v.render(ctx, ui),
+            DeveloperTools::GameOfLife(v) => v.render(ctx, ui),
+            // DeveloperTools::MOFish(v) => {}
         }
     }
 }
@@ -70,6 +76,8 @@ impl App {
                 DeveloperTools::DateTimeConverter(DateTimeConverterView::new()),
                 DeveloperTools::NumberBaseConverter(NumberBaseConverterView::new()),
                 DeveloperTools::TextDifference(DifferenceView::new()),
+                DeveloperTools::GameOfLife(GameOfLifeView::default()),
+                // DeveloperTools::MOFish(StockView::new()),
             ],
         }
     }
@@ -97,7 +105,7 @@ impl App {
         });
     }
 
-    pub fn render_main_panel(&mut self, ui: &mut egui::Ui) {
+    pub fn render_main_panel(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         ui.vertical(|ui| {
             //top
             ui.with_layout(egui::Layout::top_down(egui::Align::Max), |ui| {
@@ -117,7 +125,7 @@ impl App {
             // Main content area
             if let Some(index) = self.selected_tool_index {
                 if let Some(tool) = self.developer_tools.get_mut(index) {
-                    tool.view(ui); // 直接操作原实例
+                    tool.view(ctx, ui) // 直接操作原实例
                 }
             }
         });
@@ -131,7 +139,7 @@ impl eframe::App for App {
         });
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            self.render_main_panel(ui);
+            self.render_main_panel(ctx, ui);
         });
     }
 }
