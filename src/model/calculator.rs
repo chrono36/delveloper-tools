@@ -22,7 +22,7 @@ impl Display for ExprError {
 // Token 表示，数字、运算符号、括号
 #[derive(Debug, Clone, Copy)]
 enum Token {
-    Number(i32),
+    Number(i64),
     Plus,       // 加
     Minus,      // 减
     Multiply,   // 乘
@@ -98,7 +98,7 @@ impl Token {
     }
 
     // 根据当前运算符进行计算
-    fn compute(&self, l: i32, r: i32) -> Option<i32> {
+    fn compute(&self, l: i64, r: i64) -> Option<i64> {
         match self {
             Token::Plus => Some(l + r),
             Token::Minus => Some(l - r),
@@ -203,7 +203,7 @@ impl<'a> Expr<'a> {
 
     //计算单个Token或者子表达式
     // 计算单个 Token或者子表达式
-    fn compute_atom(&mut self) -> Result<i32> {
+    fn compute_atom(&mut self) -> Result<i64> {
         // 先检查是否为一元负号
         let negative = match self.iter.peek() {
             Some(Token::Minus) => {
@@ -250,7 +250,7 @@ impl<'a> Expr<'a> {
         Ok(value)
     }
 
-    fn compute_expr(&mut self, min_prec: i32) -> Result<i32> {
+    fn compute_expr(&mut self, min_prec: i32) -> Result<i64> {
         // 计算第一个 Token
         let mut atom_lhs = self.compute_atom()?;
 
@@ -287,7 +287,7 @@ impl<'a> Expr<'a> {
     }
 
     // 计算表达式，获取结果
-    pub fn eval(&mut self) -> Result<i32> {
+    pub fn eval(&mut self) -> Result<i64> {
         let result = self.compute_expr(1)?;
         // 如果还有 Token 没有处理，说明表达式存在错误
         if self.iter.peek().is_some() {

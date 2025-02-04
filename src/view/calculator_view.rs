@@ -11,7 +11,7 @@ use super::View;
 pub struct CalcView {
     pub input: String,
     pub output: Vec<String>,
-    pub result: Vec<(String, i32)>,
+    pub result: Vec<(String, i64)>,
     pub err_msg: String,
     pub reversed: bool,
 }
