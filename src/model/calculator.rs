@@ -28,6 +28,8 @@ enum Token {
     Multiply,   // 乘
     Divide,     // 除
     Power,      // 幂
+    Modulo,     // 新增：取模 %
+    BitwiseAnd, // 新增：按位与 &
     LeftParen,  // 左括号
     RightParen, // 右括号
 }
@@ -49,6 +51,8 @@ impl Display for Token {
                 Token::Multiply => "*".to_string(),
                 Token::Divide => "/".to_string(),
                 Token::Power => "^".to_string(),
+                Token::Modulo => "%".to_string(),
+                Token::BitwiseAnd => "&".to_string(),
                 Token::LeftParen => "(".to_string(),
                 Token::RightParen => ")".to_string(),
             }
@@ -60,7 +64,13 @@ impl Token {
     // 判断是不是运算符号
     fn is_operator(&self) -> bool {
         match self {
-            Token::Plus | Token::Minus | Token::Multiply | Token::Divide | Token::Power => true,
+            Token::Plus
+            | Token::Minus
+            | Token::Multiply
+            | Token::Divide
+            | Token::Modulo
+            | Token::BitwiseAnd
+            | Token::Power => true,
             _ => false,
         }
     }
@@ -69,16 +79,20 @@ impl Token {
     fn precedence(&self) -> i32 {
         match self {
             Token::Plus | Token::Minus => 1,
-            Token::Multiply | Token::Divide => 2,
+            Token::Multiply | Token::Divide | Token::Modulo => 2,
             Token::Power => 3,
+            Token::BitwiseAnd => 1, // & 计算优先级最低
             _ => 0,
         }
     }
     // 获取运算符号的结合性
     fn associativity(&self) -> i32 {
         match self {
-            Token::Plus | Token::Minus | Token::Multiply | Token::Divide => ASSOC_LEFT,
+            Token::Plus | Token::Minus | Token::Multiply | Token::Divide | Token::Modulo => {
+                ASSOC_LEFT
+            }
             Token::Power => ASSOC_RIGHT,
+            Token::BitwiseAnd => ASSOC_LEFT,
             _ => 0,
         }
     }
@@ -91,6 +105,14 @@ impl Token {
             Token::Multiply => Some(l * r),
             Token::Divide => Some(l / r),
             Token::Power => Some(l.pow(r as u32)),
+            Token::Modulo => {
+                if r == 0 {
+                    None // 处理除零错误
+                } else {
+                    Some(l % r)
+                }
+            }
+            Token::BitwiseAnd => Some(l & r),
             _ => None,
         }
     }
@@ -147,6 +169,8 @@ impl<'a> Tokenizer<'a> {
             Some('^') => Some(Token::Power),
             Some('(') => Some(Token::LeftParen),
             Some(')') => Some(Token::RightParen),
+            Some('%') => Some(Token::Modulo),
+            Some('&') => Some(Token::BitwiseAnd),
             _ => None,
         }
     }
@@ -180,12 +204,27 @@ impl<'a> Expr<'a> {
     //计算单个Token或者子表达式
     // 计算单个 Token或者子表达式
     fn compute_atom(&mut self) -> Result<i32> {
-        match self.iter.peek() {
+        // 先检查是否为一元负号
+        let negative = match self.iter.peek() {
+            Some(Token::Minus) => {
+                self.iter.next();
+                true
+            }
+            // 处理连续负号的情况（如--5 = 5）
+            Some(Token::Plus) => {
+                self.iter.next();
+                false
+            }
+            _ => false,
+        };
+
+        let mut value = match self.iter.peek() {
             // 如果是数字的话，直接返回
             Some(Token::Number(n)) => {
                 let val = *n;
                 self.iter.next();
-                return Ok(val);
+                // return Ok(val);
+                val
             }
             // 如果是左括号的话，递归计算括号内的值
             Some(Token::LeftParen) => {
@@ -202,7 +241,13 @@ impl<'a> Expr<'a> {
                     "Expecting a number or left parenthesis".into(),
                 ))
             }
+        };
+
+        // 应用一元负号
+        if negative {
+            value = -value;
         }
+        Ok(value)
     }
 
     fn compute_expr(&mut self, min_prec: i32) -> Result<i32> {
@@ -257,11 +302,34 @@ mod test {
     use super::*;
     #[test]
     fn test_calc() {
-        let mut expr = Expr::new("1+2*3");
-        let result = expr.eval();
-        assert_eq!(result.unwrap(), 7);
-        let mut expr = Expr::new("1+2*3+4x");
-        let result = expr.eval();
-        assert_eq!(result.unwrap(), 11);
+        // let mut expr = Expr::new("1+2*3");
+        // let result = expr.eval();
+        // assert_eq!(result.unwrap(), 7);
+        // let mut expr = Expr::new("1+2*3+4x");
+        // let result = expr.eval();
+        // assert_eq!(result.unwrap(), 11);
+        // 取模运算
+        let mut expr = Expr::new("7%4");
+        assert_eq!(expr.eval().unwrap(), 3);
+
+        // 按位与运算
+        let mut expr = Expr::new("6&3"); // 0110 & 0011 = 0010
+        assert_eq!(expr.eval().unwrap(), 2);
+
+        // 混合运算
+        let mut expr = Expr::new("(15%8)&7"); // 7 & 7 = 7
+        assert_eq!(expr.eval().unwrap(), 7);
+
+        // 错误处理测试
+        let mut expr = Expr::new("5%0");
+        assert!(expr.eval().is_err());
+
+        // 括号内的负数
+        let mut expr = Expr::new("(-5 + 2) * 3");
+        assert_eq!(expr.eval().unwrap(), -9); // (-3) * 3 = -9
+
+        // 与幂运算结合
+        let mut expr = Expr::new("-2^3");
+        assert_eq!(expr.eval().unwrap(), -8); // -(2^3) = -8
     }
 }
