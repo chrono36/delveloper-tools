@@ -6,7 +6,11 @@ edition = "2021"
 [dependencies]
 eframe = { version = "0.30.0", features = ["__screenshot", "default"] }
 egui = "0.30.0"
-egui_extras = { version = "0.30.0", features = ["image","all_loaders"] }
+egui_extras = { version = "0.30.0", features = [
+    "image",
+    "all_loaders",
+    "syntect",
+] }
 hex = "0.4.3"
 md-5 = "0.10.6"
 sha1 = "0.10.6"
@@ -17,7 +21,7 @@ base64 = "0.22.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 chrono = "0.4"
-similar = "2.7.0"
+similar = { version = "2.7.0", features = ["serde", "inline"] }
 sqlparser = "0.54.0"
 sqlformat = "0.3.5"
 image = "0.25.5"
