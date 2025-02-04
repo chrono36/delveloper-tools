@@ -13,6 +13,7 @@ fn main() -> eframe::Result<()> {
 
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
+            .with_inner_size([720.0, 580.0])
             .with_title("Developer Tools")
             .with_taskbar(true)
             .with_icon(eframe::icon_data::from_png_bytes(ICON).unwrap()),
@@ -41,7 +42,7 @@ fn setup_fonts(ctx: &egui::Context) {
     let text_styles: BTreeMap<_, _> = [
         (
             egui::TextStyle::Heading,
-            FontId::new(30.0, FontFamily::Proportional),
+            FontId::new(20.0, FontFamily::Proportional),
         ),
         (
             logo(),
@@ -61,15 +62,15 @@ fn setup_fonts(ctx: &egui::Context) {
         ),
         (
             egui::TextStyle::Body,
-            FontId::new(18.0, FontFamily::Proportional),
+            FontId::new(16.0, FontFamily::Proportional),
         ),
         (
             egui::TextStyle::Monospace,
-            FontId::new(14.0, FontFamily::Proportional),
+            FontId::new(14.0, FontFamily::Monospace),
         ),
         (
             egui::TextStyle::Button,
-            FontId::new(14.0, FontFamily::Proportional),
+            FontId::new(14.0, FontFamily::Monospace),
         ),
         (
             egui::TextStyle::Small,
@@ -110,10 +111,10 @@ fn load_fonts(ctx: &egui::Context) {
         vec![HARMONYOS_FAMILY_NAME.to_owned()],
     );
 
-    fonts.families.insert(
-        FontFamily::Monospace,
-        vec![ALIBABAPUHUITI_FAMILY_NAME.to_owned()],
-    );
+    // fonts.families.insert(
+    //     FontFamily::Monospace,
+    //     vec![ALIBABAPUHUITI_FAMILY_NAME.to_owned()],
+    // );
 
     fonts.families.insert(
         FontFamily::Name(PLAY_WRITE_FAMILY_NAME.into()),

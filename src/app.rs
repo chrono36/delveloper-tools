@@ -4,7 +4,7 @@ use developer_tools::view::{
     hash_view::HashView, number_view::NumberBaseConverterView, View, WindowView,
 };
 use eframe::egui;
-use egui::{RichText, TextStyle};
+use egui::{epaint::color, Color32, Frame, RichText, TextStyle};
 // use webbrowser;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -84,7 +84,11 @@ impl App {
 
     pub fn render_sidebar(&mut self, ui: &mut egui::Ui) {
         ui.vertical(|ui| {
-            ui.label(RichText::new("Developer Tools").text_style(TextStyle::Name("logo".into())));
+            ui.label(
+                RichText::new("Developer Tools")
+                    .text_style(TextStyle::Name("logo".into()))
+                    .color(Color32::from_rgb(144, 125, 172)),
+            );
             ui.separator();
 
             // 工具列表区域
@@ -93,7 +97,7 @@ impl App {
                     if ui
                         .selectable_label(
                             self.selected_tool_index.map_or(false, |s| s == index),
-                            tool.name(),
+                            RichText::new(tool.name()).size(12.0),
                         )
                         .clicked()
                     {
@@ -106,16 +110,21 @@ impl App {
     }
 
     pub fn render_main_panel(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
-        ui.vertical(|ui| {
+        ui.vertical_centered_justified(|ui| {
             //top
             ui.with_layout(egui::Layout::top_down(egui::Align::Max), |ui| {
                 ui.horizontal(|ui| {
-                    // egui::widgets::global_theme_preference_switch(ui);
-                    if ui.button("GitHub").clicked() {
-                        // if let Err(e) = webbrowser::open("https://github.com/chronosp/developer-tools") {
-                        //     eprintln!("Failed to open GitHub: {}", e);
-                        // }
-                    };
+                    let github_icon = egui::include_image!("../assets/icons/github.png");
+
+                    let button = egui::Button::image(github_icon).frame(false);
+                    if ui.add(button).clicked() {
+                        ctx.output_mut(|o| {
+                            o.open_url = Some(egui::output::OpenUrl {
+                                url: "https://github.com/chrono36/delveloper-tools".to_owned(),
+                                new_tab: true,
+                            });
+                        });
+                    }
                     egui::global_theme_preference_buttons(ui);
                 });
             });
@@ -134,9 +143,11 @@ impl App {
 
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        egui::SidePanel::left("sidebar").show(ctx, |ui| {
-            self.render_sidebar(ui);
-        });
+        egui::SidePanel::left("sidebar")
+            .max_width(172.0)
+            .show(ctx, |ui| {
+                self.render_sidebar(ui);
+            });
 
         egui::CentralPanel::default().show(ctx, |ui| {
             self.render_main_panel(ctx, ui);

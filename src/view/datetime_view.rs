@@ -71,12 +71,12 @@ impl DateTimeConverterView {
             let mut formatter_str = converter.formatter(self.local_time);
             ui.text_edit_singleline(&mut formatter_str);
 
-            ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
-                // ui.set_width(60.0); // 固定按钮列宽
-                if ui.small_button("📋").clicked() {
-                    // 复制逻辑
-                }
-            });
+            // ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
+            //     // ui.set_width(60.0); // 固定按钮列宽
+            //     if ui.small_button("📋").clicked() {
+            //         // 复制逻辑
+            //     }
+            // });
 
             ui.end_row();
         });
@@ -135,11 +135,11 @@ impl View for DateTimeConverterView {
             let available_width = ui.available_width() - 120.0;
             // println!("available_width:{}",available_width);
             egui::Grid::new("formatter list")
-                .num_columns(3)
+                .num_columns(2)
                 .min_col_width(40.0) // 设置列最小宽度
                 .max_col_width(available_width) // 设置最大宽度限制
                 .spacing([10.0, 5.0]) // 增加水平间距
-                .striped(true)
+                // .striped(true)
                 .show(ui, |ui| {
                     self.formater_list(ui);
                 });

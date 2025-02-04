@@ -1,4 +1,4 @@
-use egui::RichText;
+use egui::{RichText, TextStyle};
 
 use crate::model::HashAlgorithm;
 
@@ -43,11 +43,11 @@ impl View for HashView {
             let available_width = ui.available_width() - 120.0;
             // println!("available_width:{}",available_width);
             egui::Grid::new("hash result")
-            .num_columns(3)
+            .num_columns(2)
             .min_col_width(40.0) // 设置列最小宽度
             .max_col_width(available_width) // 设置最大宽度限制
             .spacing([10.0, 5.0]) // 增加水平间距
-            .striped(true)
+            // .striped(true)
             .show(ui, |ui| {
                 self.hash_result_view(ui,&column_widths);
             });
@@ -74,12 +74,14 @@ impl HashView {
 
             // 第三列：复制按钮
 
-            ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
-                // ui.set_width(60.0); // 固定按钮列宽
-                if ui.small_button("📋").clicked() {
-                    // 复制逻辑
-                }
-            });
+            // ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
+            //     if ui
+            //         .small_button(RichText::new("📋").text_style(TextStyle::Button))
+            //         .clicked()
+            //     {
+            //         // 复制逻辑
+            //     }
+            // });
 
             // ui.with_layout(
             //     egui::Layout::right_to_left(egui::Align::Center),
