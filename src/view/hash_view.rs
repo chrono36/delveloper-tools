@@ -11,7 +11,6 @@ pub struct HashView {
 
 impl HashView {
     pub fn new() -> Self {
-        println!("HashView::new() ....");
         Self {
             input: String::new(),
         }
