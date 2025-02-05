@@ -25,3 +25,11 @@ similar = { version = "2.7.0", features = ["serde", "inline"] }
 sqlparser = "0.54.0"
 sqlformat = "0.3.5"
 image = "0.25.5"
+
+[package.metadata.bundle]
+name = "DeveloperTools"
+identifier = "com.github.chrono36"
+version = "1.0.0"
+copyright = "Copyright © 2025 Your Company"
+category = "Developer Tools"
+icon = ["assets/icon.icns"]                 # 指定应用的图标文件
