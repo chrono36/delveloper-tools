@@ -1,7 +1,7 @@
 use crate::model::DateTimeConverter;
 
 use super::View;
-use chrono::{DateTime, Local, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, Local, NaiveDateTime, TimeZone};
 use egui::RichText;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -103,6 +103,10 @@ impl View for DateTimeConverterView {
 
                 if response.changed() || response.lost_focus() {
                     self.parse();
+                }
+
+                if self.input.is_empty() {
+                    self.local_time = Local::now();
                 }
 
                 // 添加格式选择下拉框

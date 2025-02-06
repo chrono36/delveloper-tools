@@ -1,4 +1,4 @@
-use egui::{RichText, TextStyle};
+use egui::RichText;
 
 use crate::model::HashAlgorithm;
 

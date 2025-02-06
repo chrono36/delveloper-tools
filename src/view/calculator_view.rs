@@ -1,6 +1,4 @@
-use std::result;
-
-use egui::{output, Layout, RichText};
+use egui::{Layout, RichText};
 use egui_extras::{Column, TableBuilder};
 
 use crate::model::Expr;
@@ -47,7 +45,7 @@ impl CalcView {
     }
 
     fn render_result(&mut self, ui: &mut egui::Ui) {
-        ui.add_space(8.0);
+        ui.add_space(5.0);
         ui.separator();
         let table = TableBuilder::new(ui)
             .striped(true)
@@ -140,12 +138,21 @@ impl View for CalcView {
 
             // Handle Enter key press
             if ui.input(|i| i.key_pressed(egui::Key::Enter)) {
+                self.err_msg.clear();
                 self.calculate();
             }
 
             if !self.err_msg.is_empty() {
                 ui.colored_label(egui::Color32::RED, &self.err_msg);
             }
+
+            ui.add_space(8.0);
+            ui.with_layout(Layout::right_to_left(egui::Align::Min), |ui| {
+                ui.add_space(10.0);
+                if ui.link(RichText::new("clear").size(12.0)).clicked() {
+                    self.result.clear();
+                }
+            });
 
             // 计算结果放入表格
             egui::ScrollArea::vertical().show(ui, |ui| {

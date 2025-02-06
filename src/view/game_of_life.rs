@@ -1,4 +1,4 @@
-use egui::{Color32, Painter, Pos2, Rect, Sense, Ui, Vec2};
+use egui::{Color32, Painter, Pos2, Rect, Sense, Vec2};
 use std::time::{Duration, Instant};
 
 use super::View;

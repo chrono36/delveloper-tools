@@ -1,10 +1,10 @@
 use developer_tools::view::{
     calculator_view::CalcView, datetime_view::DateTimeConverterView, differ_view::DifferenceView,
-    fish_view::StockView, formatter_view::FormatterView, game_of_life::GameOfLifeView,
-    hash_view::HashView, number_view::NumberBaseConverterView, View, WindowView,
+    formatter_view::FormatterView, game_of_life::GameOfLifeView, hash_view::HashView,
+    number_view::NumberBaseConverterView, View,
 };
 use eframe::egui;
-use egui::{epaint::color, Color32, Frame, RichText, TextStyle};
+use egui::{Color32, RichText, TextStyle};
 // use webbrowser;
 
 #[derive(Debug, Clone, PartialEq)]
